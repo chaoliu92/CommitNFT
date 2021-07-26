@@ -6,11 +6,11 @@ pragma solidity ^0.4.25;
 // Safe Math Library
 // ----------------------------------------------------------------------------
 contract SafeMath {
-    function Add(uint a, uint b) public pure returns (uint c) {
+    function safeAdd(uint a, uint b) public pure returns (uint c) {
         c = a + b;
         require(c >= a);
     }
-    function Sub(uint a, uint b) public pure returns (uint c) {
+    function safeSub(uint a, uint b) public pure returns (uint c) {
         require(b <= a);
         c = a - b;
     }
@@ -41,15 +41,15 @@ contract CodeToken is SafeMath {
     }
 
     function transfer(address to, uint tokens) public returns (bool success) {
-        balances[msg.sender] = Sub(balances[msg.sender], tokens);
-        balances[to] = Add(balances[to], tokens);
+        balances[msg.sender] = safeSub(balances[msg.sender], tokens);
+        balances[to] = safeAdd(balances[to], tokens);
         return true;
     }
 
     function transferFrom(address from, address to, uint tokens) public returns (bool success) {
-        balances[from] = Sub(balances[from], tokens);
-        allowed[from][msg.sender] = Sub(allowed[from][msg.sender], tokens);
-        balances[to] = Add(balances[to], tokens);
+        balances[from] = safeSub(balances[from], tokens);
+        allowed[from][msg.sender] = safeSub(allowed[from][msg.sender], tokens);
+        balances[to] = safeAdd(balances[to], tokens);
         return true;
 	}
 }
